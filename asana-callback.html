@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Connecting to Asana…</title>
+  <style>
+    body { font-family: system-ui, sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; background: #F2EAE1; color: #1A1A14; }
+    p { font-size: 14px; color: #7a6a5a; }
+  </style>
+</head>
+<body>
+  <p>Connecting to Asana… this window will close automatically.</p>
+  <script>
+    // Reads the access_token from the URL hash (implicit grant)
+    // and sends it back to the opener, then closes.
+    (function () {
+      var hash = new URLSearchParams(window.location.hash.slice(1));
+      var token = hash.get('access_token');
+
+      if (token && window.opener) {
+        window.opener.postMessage({ asanaToken: token }, '*');
+        window.close();
+      } else {
+        document.querySelector('p').textContent =
+          'Authorization failed or window was opened directly. You can close this tab.';
+      }
+    })();
+  </script>
+</body>
+</html>
