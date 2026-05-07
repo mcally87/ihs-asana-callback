@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Connecting to Asana…</title>
+  <style>
+    body { font-family: system-ui, sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; background: #F2EAE1; color: #1A1A14; }
+    p { font-size: 14px; color: #7a6a5a; }
+  </style>
+</head>
+<body>
+  <p>Connecting to Asana… this window will close automatically.</p>
+  <script>
+    (function () {
+      var params = new URLSearchParams(window.location.search);
+      var code = params.get('code');
+      var error = params.get('error');
+
+      if (error) {
+        document.querySelector('p').textContent = 'Authorization cancelled. You can close this window.';
+        return;
+      }
+
+      if (code && window.opener) {
+        window.opener.postMessage({ asanaCode: code }, '*');
+        window.close();
+      } else {
+        document.querySelector('p').textContent =
+          'This page is an OAuth callback — open it via the app, not directly.';
+      }
+    })();
+  </script>
+</body>
+</html>
