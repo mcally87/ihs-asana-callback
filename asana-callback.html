@@ -11,18 +11,22 @@
 <body>
   <p>Connecting to Asana… this window will close automatically.</p>
   <script>
-    // Reads the access_token from the URL hash (implicit grant)
-    // and sends it back to the opener, then closes.
     (function () {
-      var hash = new URLSearchParams(window.location.hash.slice(1));
-      var token = hash.get('access_token');
+      var params = new URLSearchParams(window.location.search);
+      var code = params.get('code');
+      var error = params.get('error');
 
-      if (token && window.opener) {
-        window.opener.postMessage({ asanaToken: token }, '*');
+      if (error) {
+        document.querySelector('p').textContent = 'Authorization cancelled. You can close this window.';
+        return;
+      }
+
+      if (code && window.opener) {
+        window.opener.postMessage({ asanaCode: code }, '*');
         window.close();
       } else {
         document.querySelector('p').textContent =
-          'Authorization failed or window was opened directly. You can close this tab.';
+          'This page is an OAuth callback — open it via the app, not directly.';
       }
     })();
   </script>
