@@ -15,12 +15,10 @@
       var params = new URLSearchParams(window.location.search);
       var code = params.get('code');
       var error = params.get('error');
-
       if (error) {
         document.querySelector('p').textContent = 'Authorization cancelled. You can close this window.';
         return;
       }
-
       if (code && window.opener) {
         window.opener.postMessage({ asanaCode: code }, '*');
         window.close();
